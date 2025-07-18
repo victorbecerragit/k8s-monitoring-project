@@ -1,0 +1,61 @@
+namespacesToMonitor:
+- default
+- monitoring
+- kube-system
+
+cloud:
+  logs:
+    enabled: false
+  metrics:
+    enabled: false
+  traces:
+    enabled: false
+
+local:
+  grafana:
+    enabled: true
+  logs:
+    enabled: true
+  metrics:
+    enabled: true
+  traces:
+    enabled: false
+  minio:
+    enabled: true
+
+#loki:
+#  tracing:
+#    enabled: true
+
+#ingester:
+#  replicas: 3
+#  extraEnv:
+#    - name: JAEGER_ENDPOINT
+#      value: "http://mmc-alloy-external.default.svc.cluster.local:14268/api/traces"
+      # This sets the Jaeger endpoint where traces will be sent.
+      # The endpoint points to the mmc-alloy service in the default namespace at port 14268.
+      
+#    - name: JAEGER_AGENT_TAGS
+#      value: 'cluster="prod",namespace="default"'
+      # This specifies additional tags to attach to each span.
+      # Here, the cluster is labeled as "prod" and the namespace as "default".
+      
+#    - name: JAEGER_SAMPLER_TYPE
+#      value: "ratelimiting"
+      # This sets the sampling strategy for traces.
+      # "ratelimiting" means that traces will be sampled at a fixed rate.
+      
+#    - name: JAEGER_SAMPLER_PARAM
+#      value: "1.0"
+      # This sets the parameter for the sampler.
+      # For ratelimiting, "1.0" typically means one trace per second.
+      #
+     
+#kubeStateMetrics:
+  # Scrape https://github.com/kubernetes/kube-state-metrics by default
+#  enabled: true
+  # This endpoint is created when the helm chart from
+  # https://artifacthub.io/packages/helm/prometheus-community/kube-state-metrics/
+  # is used. Change this if kube-state-metrics is installed somewhere else.
+# endpoint: kube-state-metrics.kube-state-metrics.svc.cluster.local:8080
+
