@@ -878,6 +878,7 @@ serverFiles:
           # disable certificate verification by uncommenting the line below.
           #
           # insecure_skip_verify: true
+          insecure_skip_verify: true
         bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
 
         # Keep only the default/kubernetes service endpoints for the https port. This
@@ -1246,6 +1247,80 @@ serverFiles:
             action: replace
             target_label: node
 
+#      - job_name: minio-tenant-beta-nodes
+#        #bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoiTFo5Z08yOXhaODhMNzREUEdYOXkiLCJleHAiOjQ5MDY5NDU0Nzh9.m4u8o1cj1OnivoQDwfB5QmtXS3eXhVFZSVOKnEzmcO_8QmtimaNVMYrgRjQe2i5l-tS1TI_dk7SVJtliI-pU0A
+#        metrics_path: /minio/v2/metrics/node
+#        scheme: http
+#        tls_config:
+#          insecure_skip_verify: true
+#        static_configs:
+#          - targets: [myminio-pool-0-0.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-1.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-2.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-3.myminio-hl.tenant-beta.svc.cluster.local:9000]
+#
+#      - job_name: minio-tenant-beta
+#        #bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoiTFo5Z08yOXhaODhMNzREUEdYOXkiLCJleHAiOjQ5MDY5NDU0Nzh9.m4u8o1cj1OnivoQDwfB5QmtXS3eXhVFZSVOKnEzmcO_8QmtimaNVMYrgRjQe2i5l-tS1TI_dk7SVJtliI-pU0A
+#        metrics_path: /minio/v2/metrics/bucket
+#        scheme: http
+#        tls_config:
+#          insecure_skip_verify: true
+#        static_configs:
+#          - targets: [myminio-pool-0-0.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-1.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-2.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-3.myminio-hl.tenant-beta.svc.cluster.local:9000]        
+
+      - job_name: minio-beta-metrics-v3
+        #bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoiTFo5Z08yOXhaODhMNzREUEdYOXkiLCJleHAiOjQ5MDY5NDU0Nzh9.m4u8o1cj1OnivoQDwfB5QmtXS3eXhVFZSVOKnEzmcO_8QmtimaNVMYrgRjQe2i5l-tS1TI_dk7SVJtliI-pU0A
+        metrics_path: /minio/metrics/v3
+        scheme: http
+        tls_config:
+          insecure_skip_verify: true
+        static_configs:
+          - targets: [tenant-beta-pool-0-0.tenant-beta-hl.tenant-beta.svc.cluster.local:9000,tenant-beta-pool-0-1.tenant-beta-hl.tenant-beta.svc.cluster.local:9000,tenant-beta-pool-0-2.tenant-beta-hl.tenant-beta.svc.cluster.local:9000,tenant-beta-pool-0-2.tenant-beta-hl.tenant-beta.svc.cluster.local:9000]
+
+#      - job_name: minio-tenant-alpha-nodes
+#        #bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoiTFo5Z08yOXhaODhMNzREUEdYOXkiLCJleHAiOjQ5MDY5NDU0Nzh9.m4u8o1cj1OnivoQDwfB5QmtXS3eXhVFZSVOKnEzmcO_8QmtimaNVMYrgRjQe2i5l-tS1TI_dk7SVJtliI-pU0A
+#        metrics_path: /minio/v2/metrics/node
+#        scheme: http
+#        tls_config:
+#          insecure_skip_verify: true
+#        static_configs:
+#          - targets: [minio-alpha-pool-0-0.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-1.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-2.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-3.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000]
+#
+#      - job_name: minio-tenant-alpha
+#        #bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoiTFo5Z08yOXhaODhMNzREUEdYOXkiLCJleHAiOjQ5MDY5NDU0Nzh9.m4u8o1cj1OnivoQDwfB5QmtXS3eXhVFZSVOKnEzmcO_8QmtimaNVMYrgRjQe2i5l-tS1TI_dk7SVJtliI-pU0A
+#        metrics_path: /minio/v2/metrics/bucket
+#        scheme: http
+#        tls_config:
+#          insecure_skip_verify: true
+#        static_configs:
+#          - targets: [minio-alpha-pool-0-0.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-1.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-2.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-3.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000]
+
+      - job_name: minio-alpha-metrics-v3
+        #bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoiTFo5Z08yOXhaODhMNzREUEdYOXkiLCJleHAiOjQ5MDY5NDU0Nzh9.m4u8o1cj1OnivoQDwfB5QmtXS3eXhVFZSVOKnEzmcO_8QmtimaNVMYrgRjQe2i5l-tS1TI_dk7SVJtliI-pU0A
+        metrics_path: /minio/metrics/v3
+        scheme: http
+        tls_config:
+          insecure_skip_verify: true
+        static_configs:
+          - targets: [minio-alpha-pool-0-0.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-1.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-2.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000,minio-alpha-pool-0-3.minio-alpha-hl.tenant-alpha.svc.cluster.local:9000]
+
+#- targets: ['localhost:9000']
+#- targets: ['localhost:9000']
+#      - job_name: minio-tnt-alpha
+#        bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoibWluaW8iLCJleHAiOjQ5MDY4ODI0NTh9.NKkqrZp7Y4ebDWJpAuwp-YnH0W73xciGJIbUKAX8sCYmLEgmX_NR2eO3RkSvY5ELGyeajBYucLmd-geELSEKVQ
+#        metrics_path: /minio/v2/metrics/bucket
+#        scheme: http
+#        tls_config:
+#          insecure_skip_verify: true
+#        static_configs:
+#          - targets: ['10.244.1.27:9000','10.244.1.28:9000','10.244.2.18:9000','10.244.3.37:9000'] 
+
+#      - job_name: minio-tnt-beta
+#        bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoibWluaW8iLCJleHAiOjQ5MDY4ODI0NTh9.NKkqrZp7Y4ebDWJpAuwp-YnH0W73xciGJIbUKAX8sCYmLEgmX_NR2eO3RkSvY5ELGyeajBYucLmd-geELSEKVQ
+#        metrics_path: /minio/v2/metrics/bucket
+#        scheme: http
+#        tls_config:
+#          insecure_skip_verify: true
+#        static_configs:
+#          - targets: ['10.244.1.30:9000','10.244.2.21:9000','10.244.2.22:9000','10.244.3.27:9000'] 10.244.1.51:9000,10.244.2.38:9000,10.244.2.39:9000
+            
 # adds additional scrape configs to prometheus.yml
 # must be a string so you have to add a | after extraScrapeConfigs:
 # example adds prometheus-blackbox-exporter scrape config
@@ -1344,4 +1419,3 @@ prometheus-pushgateway:
   # Optional service annotations
   serviceAnnotations:
     prometheus.io/probe: pushgateway
-

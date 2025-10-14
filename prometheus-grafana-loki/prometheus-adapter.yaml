@@ -1,0 +1,42 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/component: metrics-adapter
+    app.kubernetes.io/name: prometheus-adapter
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 0.12.0
+  name: prometheus-adapter
+  namespace: monitoring
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    metricRelabelings:
+    - action: drop
+      regex: (apiserver_client_certificate_.*|apiserver_envelope_.*|apiserver_flowcontrol_.*|apiserver_storage_.*|apiserver_webhooks_.*|workqueue_.*)
+      sourceLabels:
+      - __name__
+    port: https
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true
+  - job_name: minio-cluster
+    metrics_path: /minio/v2/metrics/cluster
+    scheme: http
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['minio.tenant-beta.svc.cluster.local']
+  - job_name: minio-node
+    metrics_path: /minio/v2/metrics/node
+    scheme: http
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: [myminio-pool-0-0.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-1.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-2.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-3.myminio-hl.tenant-beta.svc.cluster.local:9000]
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: metrics-adapter
+      app.kubernetes.io/name: prometheus-adapter
+      app.kubernetes.io/part-of: kube-prometheus

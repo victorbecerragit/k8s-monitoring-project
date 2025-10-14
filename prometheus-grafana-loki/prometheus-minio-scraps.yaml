@@ -1,0 +1,18 @@
+- job_name: minio-cluster
+  #bearer_token: <token>
+  metrics_path: /minio/v2/metrics/cluster
+  #scheme: https
+  scheme: http
+  tls_config:
+    insecure_skip_verify: true
+  static_configs:
+  - targets: ['minio.tenant-beta.svc.cluster.local']
+- job_name: minio-node
+  #bearer_token: <token>
+  metrics_path: /minio/v2/metrics/node
+  #scheme: https
+  scheme: http
+  tls_config:
+    insecure_skip_verify: true
+  static_configs:
+  - targets: [myminio-pool-0-0.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-1.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-2.myminio-hl.tenant-beta.svc.cluster.local:9000,myminio-pool-0-3.myminio-hl.tenant-beta.svc.cluster.local:9000]

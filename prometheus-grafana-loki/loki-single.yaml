@@ -81,3 +81,23 @@ gateway:
 # Enable minio for storage if object_store is s3
 minio:
   enabled: false
+
+promtail:
+  enabled: true
+  scrape_configs:
+    - job_name: minio-tenant-logs
+      kubernetes_sd_configs:
+        - role: pod
+      relabel_configs:
+        # Select only pods in minio tenant namespace
+        - source_labels: [__meta_kubernetes_namespace]
+          action: keep
+          regex: minio-tenant-beta
+        # Filter to pods matching MinIO tenant labels
+        - source_labels: [__meta_kubernetes_pod_label_v1_min_io_tenant]
+          action: keep
+          regex: tenant-beta
+      pipeline_stages:
+        - docker: {}
+      # (Optional) Add further label or line processing as needed
+
