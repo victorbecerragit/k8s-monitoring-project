@@ -26,14 +26,14 @@ datasources:
     datasources:
     - name: Loki
       type: loki
-      url: http://loki-gateway.logging.svc.cluster.local
+      url: http://loki.logging.svc.cluster.local:3100 
       access: proxy
       isDefault: false
       editable: true
     - name: Prometheus-Local
       type: prometheus
       access: proxy
-      url: http://prometheus-server.monitoring.svc.cluster.local
+      url: http://prometheus-operator-kube-p-prometheus.prometheus.svc.cluster.local:9090
       isDefault: false
       editable: true
 

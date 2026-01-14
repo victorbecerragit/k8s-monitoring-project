@@ -1,0 +1,48 @@
+image:
+  repository: cr.fluentbit.io/fluent/fluent-bit
+  tag: 3.0.0
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+    - name: metrics
+      port: 2020
+      targetPort: 2020
+      protocol: TCP
+
+livenessProbe: null
+readinessProbe: null
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+config:
+  service: |
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        
+  inputs: |
+    [INPUT]
+        Name            http
+        Listen          0.0.0.0
+        Port            8080
+        Tag             minio
+        successful_response_code 200
+        
+  outputs: |
+    [OUTPUT]
+        Name            file
+        Match           minio
+        Path            /tmp/minio-logs.json
+

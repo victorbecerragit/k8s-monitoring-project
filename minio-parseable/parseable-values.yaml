@@ -1,0 +1,24 @@
+parseable:
+  # Load configuration from the secret we created
+  existingSecret: parseable-env-secret
+  
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8000
+
+  # Resource limits
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+  # Persistence for staging directory
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "" # Use default storage class

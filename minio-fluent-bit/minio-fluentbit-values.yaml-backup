@@ -1,0 +1,72 @@
+config:
+  service: |
+    [SERVICE]
+        Flush         5
+        Daemon        Off
+        Log_Level     debug
+        
+  inputs: |
+    [INPUT]
+        Name              tail
+        Path              /var/log/containers/*minio*.log
+        Tag               minio.container
+        Parser            docker
+        Refresh_Interval  5
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+        Skip_Empty_Lines  On
+        DB                /var/log/flb_minio.db
+        DB.Sync           Normal
+        
+    [INPUT]
+        Name            http
+        Listen          0.0.0.0
+        Port            8080
+        Tag             minio.audit
+        successful_response_code 204
+        
+  filters: |
+    [FILTER]
+        Name                kubernetes
+        Match               minio.container
+        Kube_URL            https://kubernetes.default.svc:443
+        Merge_Log           On
+        Keep_Log            On
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude On
+        Buffer_Size         256k
+        
+    [FILTER]
+        Name    modify
+        Match   minio.audit
+        Add     service_name minio-audit
+        Add     source http-endpoint
+        
+  outputs: |
+    [OUTPUT]
+        Name                http
+        Match               minio.*
+        Host                loki.logging.svc.cluster.local
+        Port                3100
+        URI                 /loki/api/v1/push
+        Format              json
+        Header              Content-Type application/json
+        Header              X-Loki-Stream-Labels job=minio-logs
+        compress            gzip
+        json_date_key       time
+        json_date_format    iso8601
+        Retry_Limit         3
+        net.keepalive       on
+        net.connect_timeout 10
+
+livenessProbe: null
+readinessProbe: null
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+

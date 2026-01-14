@@ -1,4 +1,9 @@
 loki:
+  auth_enabled: false
+  ingester_client:
+    remote_timeout: 10s  # Increase from default 1s
+  server:
+    http_server_write_timeout: 600s
   commonConfig:
     replication_factor: 1
   storage:
@@ -42,11 +47,11 @@ singleBinary:
 
   resources:
     requests:
+      cpu: 500m
+      memory: 521Mi
+    limits:
       cpu: "1"
       memory: "1Gi"
-    limits:
-      cpu: "2"
-      memory: "2Gi"
 
 sidecar:
   image:
@@ -74,9 +79,21 @@ chunksCache:
 # By default the URL will be http://loki-gateway/loki/api/
 #
 gateway:
-  service:
-  #     type: LoadBalancer
-    type: NodePort
+  enabled: false
+  basicAuth:
+    enabled: false
+      #existingSecret: loki-gateway-auth
+    username: admin
+    password: admin   
+
+
+  ingress:
+    enabled: true
+    hosts:
+      - host: loki-gateway.logging.svc.cluster.local
+        paths:
+          - path: /
+            pathType: Prefix
 
 # Enable minio for storage if object_store is s3
 minio:
@@ -100,4 +117,3 @@ promtail:
       pipeline_stages:
         - docker: {}
       # (Optional) Add further label or line processing as needed
-

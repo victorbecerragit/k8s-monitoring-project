@@ -1,0 +1,52 @@
+kind: Deployment
+extraPorts:
+    - port: 9880
+      containerPort: 9880
+      protocol: TCP
+      name: tcp
+config:
+  service: |
+    [SERVICE]
+        Daemon Off
+        Flush {{ .Values.flush }}
+        Log_Level {{ .Values.logLevel }}
+        Parsers_File /fluent-bit/etc/parsers.conf
+        Parsers_File /fluent-bit/etc/conf/custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port  {{ .Values.metricsPort }}
+        Health_Check On
+ ## https://docs.fluentbit.io/manual/pipeline/inputs
+  inputs: |
+    [INPUT]
+        Name http
+        Listen 0.0.0.0
+        Port 9880
+        Tag minio-audit
+  ## https://docs.fluentbit.io/manual/pipeline/filters
+  filters: |
+    [FILTER]
+        Name record_modifier
+        Match minio-audit
+        Remove_key tags
+        Remove_key partition
+        Remove_key remoteHost
+        Remove_key topic
+        Remove_key trigger
+        Remove_key version
+        Remove_key time  ## https://docs.fluentbit.io/manual/pipeline/outputs
+  outputs: |
+    [OUTPUT]
+        Name es
+        Match minio-audit
+        Index fluent-bit
+        Host elasticsearch-master.efk.svc.cluster.local
+        Port 9200
+        HTTP_User <elastic_username>
+        HTTP_Passwd <elastic_password>
+        tls on
+        tls.verify Off
+        Logstash_Format On
+        Logstash_Prefix minio-audit
+        Retry_Limit False
+        Suppress_Type_Name On
